@@ -1,4 +1,3 @@
-namespace Practice_4.Data;
 
 using Microsoft.EntityFrameworkCore;
 

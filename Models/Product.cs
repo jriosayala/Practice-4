@@ -1,4 +1,3 @@
-namespace Practice_4.models;
 public class Product
 {
     public int ProductID { get; set; }

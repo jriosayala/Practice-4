@@ -1,4 +1,3 @@
-namespace Practice_4.models;
 public class Sale
 {
     public int SaleID { get; set; }
