@@ -1,4 +1,6 @@
-﻿class Program
+﻿using System.Globalization;
+
+class Program
 {
     static void Main(string[] args)
     {
@@ -63,10 +65,22 @@
                     break;
 
                 case "4":
-                    var groupedSales = productRepository.GroupSalesByDay();
-                    foreach (var group in groupedSales)
+                    Console.WriteLine("Enter start date (yyyy-MM-dd):");
+                    var startDateInput = Console.ReadLine();
+                    Console.WriteLine("Enter end date (yyyy-MM-dd):");
+                    var endDateInput = Console.ReadLine();
+                    if (DateTime.TryParseExact(startDateInput, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate) &&
+                    DateTime.TryParseExact(endDateInput, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
                     {
-                        Console.WriteLine($"{group.Key}: {group.Sum(s => s.QuantitySold)} sales");
+                        var groupedSales = productRepository.GroupSalesByDay(startDate, endDate);
+                        foreach (var group in groupedSales)
+                        {
+                            Console.WriteLine($"{group.Key}: {group.Sum(s => s.QuantitySold)} sales");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid date format. Please use yyyy-MM-dd");
                     }
                     break;
 

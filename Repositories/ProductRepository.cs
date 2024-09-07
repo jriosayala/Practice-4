@@ -18,9 +18,14 @@ public class ProductRepository(AppDbContext context)
         return [.. _context.Products.Where(p => p.ProductName.Contains(searchText) || p.ProductID.ToString() == searchText)];
     }
 
-    public IEnumerable<IGrouping<DateTime, Sale>> GroupSalesByDay()
+    public IEnumerable<IGrouping<DateTime, Sale>> GroupSalesByDay(DateTime startDate, DateTime endDate)
     {
-        return [.. _context.Sales.GroupBy(s => s.SaleDate.Date).OrderByDescending(g => g.Sum(s => s.QuantitySold))];
+        return [.. _context.Sales
+            .Where(s => s.SaleDate >= startDate && s.SaleDate <= endDate)
+            .AsEnumerable() // Switch to client-side evaluation as suggested
+            .GroupBy(s => s.SaleDate.Date)
+            .OrderByDescending(g => g.Sum(s => s.QuantitySold))
+            .ToList()];
     }
 
     public IEnumerable<ProductSalesInfo> GetProductAndSalesInfoForMonth(int month, int year)
