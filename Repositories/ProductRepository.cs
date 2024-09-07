@@ -4,7 +4,7 @@ public class ProductRepository(AppDbContext context)
 
     public IEnumerable<Product> GetAllProducts()
     {
-        return _context.Products.ToList();
+        return [.. _context.Products];
     }
 
     public void AddProduct(Product product)
@@ -23,11 +23,17 @@ public class ProductRepository(AppDbContext context)
         return [.. _context.Sales.GroupBy(s => s.SaleDate.Date).OrderByDescending(g => g.Sum(s => s.QuantitySold))];
     }
 
-    public IEnumerable<object> GetProductAndSalesInfoForMonth(int month, int year)
+    public IEnumerable<ProductSalesInfo> GetProductAndSalesInfoForMonth(int month, int year)
     {
         return _context.Sales
             .Where(s => s.SaleDate.Month == month && s.SaleDate.Year == year)
-            .Join(_context.Products, s => s.ProductID, p => p.ProductID, (s, p) => new { s, p})
+            .Join(_context.Products, s => s.ProductID, p => p.ProductID, (s, p) => new ProductSalesInfo {
+                ProductID = p.ProductID,
+                ProductName = p.ProductName,
+                SaleDate = s.SaleDate,
+                QuantitySold = s.QuantitySold,
+                SalePrice = s.SalePrice
+            })
             .ToList();
     }
 

@@ -78,7 +78,7 @@
                     var productSalesInfo = productRepository.GetProductAndSalesInfoForMonth(month, year);
                     foreach (var info in productSalesInfo)
                     {
-                        Console.WriteLine($"{info.p.ProductName} - {info.s.QuantitySold} sold on {info.s.SaleDate}");
+                        Console.WriteLine($"{info.ProductName} - {info.QuantitySold} sold on {info.SaleDate}");
                     }
                     break;
 
