@@ -30,7 +30,7 @@ public class ProductRepository(AppDbContext context)
 
     public IEnumerable<ProductSalesInfo> GetProductAndSalesInfoForMonth(int month, int year)
     {
-        return _context.Sales
+        return [.. _context.Sales
             .Where(s => s.SaleDate.Month == month && s.SaleDate.Year == year)
             .Join(_context.Products, s => s.ProductID, p => p.ProductID, (s, p) => new ProductSalesInfo {
                 ProductID = p.ProductID,
@@ -38,8 +38,7 @@ public class ProductRepository(AppDbContext context)
                 SaleDate = s.SaleDate,
                 QuantitySold = s.QuantitySold,
                 SalePrice = s.SalePrice
-            })
-            .ToList();
+            })];
     }
 
     public IEnumerable<Product> GetProductsWithNoSalesOrPurchases()
